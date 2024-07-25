@@ -46,7 +46,7 @@ public class grabpack : MonoBehaviour
 
 
 
-    private void Update()
+    private void LateUpdate()
     {
         //call the tick update
         left.UpdateTick();

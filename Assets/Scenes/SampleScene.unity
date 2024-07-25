@@ -413,11 +413,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   OriginLeft: {fileID: 1661232282}
-  OriginRight: {fileID: 0}
+  OriginRight: {fileID: 1214563294}
   LeftHand: {fileID: 708331958830636401}
   RightHand: {fileID: 539342141974882125}
   LeftGun: {fileID: 1300047601}
-  RightGun: {fileID: 3048738597687609390}
+  RightGun: {fileID: 1803841264}
   LeftLineStart: {fileID: 5681158946271140073}
   RightLineStart: {fileID: 8493167375113414560}
   MaxDis: 10
@@ -1334,6 +1334,37 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!1 &1214563293
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1214563294}
+  m_Layer: 0
+  m_Name: RightLauncher
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1214563294
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1214563293}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.7069834, y: -0, z: -0, w: 0.7072302}
+  m_LocalPosition: {x: 0.13910007, y: -0.09159994, z: 0.21290016}
+  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 543450653537533990}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1300047600
 GameObject:
   m_ObjectHideFlags: 0
@@ -1528,7 +1559,7 @@ Transform:
   m_GameObject: {fileID: 1803841263}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.0013433933, y: -0.0008019311, z: 0.0013204948}
+  m_LocalPosition: {x: 0.0013433933, y: -0.0009157187, z: 0.0013204564}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2152,6 +2183,7 @@ Transform:
   - {fileID: 3687400074185305477}
   - {fileID: 7326533951469534114}
   - {fileID: 539342141974882125}
+  - {fileID: 1214563294}
   - {fileID: 3650074619073832738}
   - {fileID: 2372268549453770356}
   - {fileID: 4364564740083267639}
@@ -3796,8 +3828,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1963338694403801775}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.000113787595, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

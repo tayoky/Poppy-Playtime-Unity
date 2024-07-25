@@ -35,7 +35,7 @@ public class grabpack : MonoBehaviour
         right = new GrabGun();
         right.origin = OriginRight;
         right.hand = RightHand;
-        right.gun = LeftGun;
+        right.gun = RightGun;
         right.line_start = RightLineStart;
         right.line = RightLine;
         right.button = 1;

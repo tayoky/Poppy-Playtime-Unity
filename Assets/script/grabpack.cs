@@ -11,13 +11,11 @@ public class grabpack : MonoBehaviour
     public Transform LeftHand,RightHand;
     public Transform LeftGun, RightGun;
     public Transform LeftLineStart, RightLineStart;
-    public int button;
     public float MaxDis,HandSpeed;
-    private Vector3 point,norm;
     public LineRenderer LeftLine,RightLine;
     public Vector2 Dec;
-    public GrabGun left;
-    public GrabGun right;
+    private GrabGun left;
+    private GrabGun right;
     // Start is called before the first frame update
     void Start()
     {

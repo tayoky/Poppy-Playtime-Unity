@@ -48,14 +48,20 @@ public class grabpack : MonoBehaviour
 
     private void Update()
     {
+        //call the tick update
         left.UpdateTick();
+        right.UpdateTick();
     }
 
     private void FixedUpdate()
     {
+        //call the fixedtcik update
         left.FixedUpdateTick();
+        right.FixedUpdateTick();
     }
+    
 
+    //grabgun class important thigs is here
     public class GrabGun : MonoBehaviour
     {
         public Transform origin;

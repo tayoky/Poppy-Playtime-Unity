@@ -5,190 +5,226 @@ using UnityEngine;
 
 public class grabpack : MonoBehaviour
 {
+   
+
     public Transform OriginLeft,OriginRight;
     public Transform LeftHand,RightHand;
     public Transform LeftGun, RightGun;
     public Transform LeftLineStart, RightLineStart;
     public int button;
-    private bool GrabLeft,LeftGrabAir,GrabRight,RightGrabAir;
     public float MaxDis,HandSpeed;
     private Vector3 point,norm;
-    public LineRenderer line;
+    public LineRenderer LeftLine,RightLine;
     public Vector2 Dec;
+    public GrabGun left;
+    public GrabGun right;
     // Start is called before the first frame update
     void Start()
     {
         Dec = Vector2.zero;
-        GrabLeft = false;
-        line = GetComponent<LineRenderer>();
+
+        //ini left
+        left = new GrabGun();
+        left.origin = OriginLeft;
+        left.hand = LeftHand;
+        left.gun = LeftGun;
+        left.line_start = LeftLineStart;
+        left.line = LeftLine;
+        left.button = 0;
+        left.parent = this;
+
+        //ini right
+        right = new GrabGun();
+        right.origin = OriginRight;
+        right.hand = RightHand;
+        right.gun = LeftGun;
+        right.line_start = RightLineStart;
+        right.line = RightLine;
+        right.button = 1;
+        right.parent = this;
+
     }
 
-    // Update is called once per frame
-    void Update()
+
+
+
+    private void Update()
     {
-        if(Input.GetMouseButtonDown(button))
-        {
-            if(GrabLeft)
-            {
-                GrabLeft = false;
-            }
-            else
-            {
-                RaycastHit hit;
-                if(Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit,MaxDis))
-                {
-                    GrabLeft = true;
-
-                    //set parent and find the point
-                    point = hit.point;
-                    norm = hit.normal;
-                    LeftHand.parent = null;
-
-                }
-
-            }
-        }
-
-
-        //line
-        Line();
-
-        //gun point to the hand
-        LeftGun.LookAt(line.GetPosition(line.positionCount - 2));
-
+        left.UpdateTick();
     }
 
     private void FixedUpdate()
     {
-        if (GrabLeft)
+        left.FixedUpdateTick();
+    }
+
+    public class GrabGun : MonoBehaviour
+    {
+        public Transform origin;
+        public Transform hand;
+        public Transform gun;
+        public Transform line_start;
+        public int button = 0;
+        public bool grab = false;
+        public Vector3 point, norm;
+        public LineRenderer line;
+        public grabpack parent;
+
+        public void UpdateTick()
         {
-            Vector3 dif = LeftHand.position - point;
-            if(dif.magnitude < HandSpeed)
+            if (Input.GetMouseButtonDown(button))
             {
-                //snap the hand to the point
-                LeftHand.position = point;
-                //LeftHand.rotation = Quaternion.LookRotation(norm,Vector3.up);
-            }
-            else
-            {
-                //move the hand to the point
-                LeftHand.position -= dif.normalized * HandSpeed;
-            }
-        }
-        else
-        {
-            if(line.positionCount < 3)
-            {
-                Vector3 dif = LeftHand.position - OriginLeft.position;
-                if (dif.magnitude < HandSpeed)
+                if (grab)
                 {
-                    //snap the hand to the launcher
-                    LeftHand.parent = OriginLeft;
-                    LeftHand.position = OriginLeft.position;
-                    //reset vertex
-                    line.positionCount = 2;
+                    grab = false;
                 }
                 else
                 {
-                    //move the hand to the launcher
-                    LeftHand.position -= dif.normalized * HandSpeed;
+                    RaycastHit hit;
+                    if (Physics.Raycast(parent.transform.position, parent.transform.TransformDirection(Vector3.forward), out hit, parent.MaxDis))
+                    {
+                        grab = true;
 
+                        //set parent and find the point
+                        point = hit.point;
+                        norm = hit.normal;
+                        hand.parent = null;
+
+                    }
 
                 }
-
-                LeftHand.eulerAngles = OriginLeft.eulerAngles;
             }
-            else
-            {
-                Vector3 dif = LeftHand.position - line.GetPosition(1);
-                if (dif.magnitude < HandSpeed)
-                {
-                    //snap
-                    LeftHand.position = line.GetPosition(1);
 
-                    ShiftLeftLine();
+
+            //line
+            Line();
+
+            //gun point to the hand
+            gun.LookAt(line.GetPosition(line.positionCount - 2));
+        }
+        public void FixedUpdateTick()
+        {
+            if (grab)
+            {
+                Vector3 dif = hand.position - point;
+                if (dif.magnitude < parent.HandSpeed)
+                {
+                    //snap the hand to the point
+                    hand.position = point;
+                    //LeftHand.rotation = Quaternion.LookRotation(norm,Vector3.up);
                 }
                 else
                 {
                     //move the hand to the point
-                    LeftHand.position -= dif.normalized * HandSpeed;
-
-
+                    hand.position -= dif.normalized * parent.HandSpeed;
                 }
             }
+            else
+            {
+                if (line.positionCount < 3)
+                {
+                    Vector3 dif = hand.position - origin.position;
+                    if (dif.magnitude < parent.HandSpeed)
+                    {
+                        //snap the hand to the launcher
+                        hand.parent = origin;
+                        hand.position = origin.position;
+                        //reset vertex
+                        line.positionCount = 2;
+                    }
+                    else
+                    {
+                        //move the hand to the launcher
+                        hand.position -= dif.normalized * parent.HandSpeed;
+
+
+                    }
+
+                    hand.eulerAngles = origin.eulerAngles;
+                }
+                else
+                {
+                    Vector3 dif = hand.position - line.GetPosition(1);
+                    if (dif.magnitude < parent.HandSpeed)
+                    {
+                        //snap
+                        hand.position = line.GetPosition(1);
+
+                        ShiftLeftLine();
+                    }
+                    else
+                    {
+                        //move the hand to the point
+                        hand.position -= dif.normalized * parent.HandSpeed;
+
+
+                    }
+                }
+            }
+
+
         }
 
-
-        //smooth rot
-        Dec *= 0.8f;
-       
-    }
-
-
-    void Line()
-    {
-        //set extremites position
-        line.SetPosition(0, LeftHand.position);
-        line.SetPosition(line.positionCount - 1, LeftLineStart.position);
-
-        //detect intersection
-        LineIntersect();
-
-        if(line.positionCount > 2)
+        void Line()
         {
-            //symplify line
-            LineSimplify();
+            //set extremites position
+            line.SetPosition(0, hand.position);
+            line.SetPosition(line.positionCount - 1, line_start.position);
+
+            //detect intersection
+            LineIntersect();
+
+            if (line.positionCount > 2)
+            {
+                //symplify line
+                LineSimplify();
+            }
+
         }
-
-    }
-
-
-    void LineIntersect()
-    {
-        //cacul vector dif
-        RaycastHit hit;
-        Vector3 PointToTest = line.GetPosition(line.positionCount - 2);
-        Vector3 dif = PointToTest - LeftLineStart.position;
-
-
-        if (Physics.Raycast(LeftLineStart.position, dif, out hit, dif.magnitude - 0.005f))
+        void LineIntersect()
         {
-            Debug.Log("new vertex create because of object : " + hit.transform.gameObject.ToString() + " at : " + hit.point.ToString());
-            //increase the number of vertex
-            line.positionCount++;
+            //cacul vector dif
+            RaycastHit hit;
+            Vector3 PointToTest = line.GetPosition(line.positionCount - 2);
+            Vector3 dif = PointToTest - line_start.position;
 
-            //update pos
-            line.SetPosition(line.positionCount - 2, hit.point);
-            line.SetPosition(line.positionCount - 1, LeftLineStart.position);
+
+            if (Physics.Raycast(line_start.position, dif, out hit, dif.magnitude - 0.005f))
+            {
+                Debug.Log("new vertex create because of object : " + hit.transform.gameObject.ToString() + " at : " + hit.point.ToString());
+                //increase the number of vertex
+                line.positionCount++;
+
+                //update pos
+                line.SetPosition(line.positionCount - 2, hit.point);
+                line.SetPosition(line.positionCount - 1, line_start.position);
+            }
         }
-    }
-
-    void LineSimplify()
-    {
-        //cacul vector dif
-        RaycastHit hit;
-        Vector3 PointToTest = line.GetPosition(line.positionCount - 3);
-        Vector3 dif = PointToTest - LeftLineStart.position;
-        if(!Physics.Raycast(LeftLineStart.position,dif, out hit, dif.magnitude))
+        void LineSimplify()
         {
-            Debug.Log("remove vertex to sypmlify");
-            //decrease the number of vertex
+            //cacul vector dif
+            RaycastHit hit;
+            Vector3 PointToTest = line.GetPosition(line.positionCount - 3);
+            Vector3 dif = PointToTest - line_start.position;
+            if (!Physics.Raycast(line_start.position, dif, out hit, dif.magnitude))
+            {
+                Debug.Log("remove vertex to sypmlify");
+                //decrease the number of vertex
+                line.positionCount--;
+
+                //update pos
+                line.SetPosition(line.positionCount - 1, line_start.position);
+            }
+        }
+        void ShiftLeftLine()
+        {
+
+            for (int i = 0; i < line.positionCount - 1; i++)
+            {
+                line.SetPosition(i, line.GetPosition(i + 1));
+            }
             line.positionCount--;
-
-            //update pos
-            line.SetPosition(line.positionCount - 1, LeftLineStart.position);
         }
-    }
-
-
-    void ShiftLeftLine()
-    {
-        
-        for (int i=0;i<line.positionCount -1;i++)
-        {
-            line.SetPosition(i,line.GetPosition(i + 1));
-        }
-        line.positionCount--;
     }
 
 }

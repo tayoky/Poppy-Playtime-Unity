@@ -23,6 +23,7 @@ public class grabpack : MonoBehaviour
 
         //ini left
         left = new GrabGun();
+        left.hand_beavhiour = LeftHand.GetComponent<Hand>();
         left.origin = OriginLeft;
         left.hand = LeftHand;
         left.gun = LeftGun;
@@ -33,6 +34,7 @@ public class grabpack : MonoBehaviour
 
         //ini right
         right = new GrabGun();
+        right.hand_beavhiour = RightHand.GetComponent<Hand>();
         right.origin = OriginRight;
         right.hand = RightHand;
         right.gun = RightGun;
@@ -77,6 +79,7 @@ public class grabpack : MonoBehaviour
         public Vector3 point, norm;
         public LineRenderer line;
         public grabpack parent;
+        public Hand hand_beavhiour;
 
         public void UpdateTick()
         {
@@ -88,16 +91,19 @@ public class grabpack : MonoBehaviour
                 }
                 else
                 {
-                    RaycastHit hit;
-                    if (Physics.Raycast(parent.transform.position, parent.transform.TransformDirection(Vector3.forward), out hit, parent.MaxDis))
+                    if (hand_beavhiour.CanFire)
                     {
-                        grab = true;
+                        RaycastHit hit;
+                        if (Physics.Raycast(parent.transform.position, parent.transform.TransformDirection(Vector3.forward), out hit, parent.MaxDis))
+                        {
+                            grab = true;
 
-                        //set parent and find the point
-                        point = hit.point;
-                        norm = hit.normal;
-                        hand.parent = null;
+                            //set parent and find the point
+                            point = hit.point;
+                            norm = hit.normal;
+                            hand.parent = null;
 
+                        }
                     }
 
                 }

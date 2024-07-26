@@ -14,6 +14,8 @@ public class Movement : MonoBehaviour
     private Action action;
     private Vector2 direction;
     private float speed;
+    public Animator grabpack; //aniamtor for first person anim
+    private Vector3 move;
 
     enum Action
     {
@@ -53,10 +55,9 @@ public class Movement : MonoBehaviour
         if (action == Action.Walk) speed = WalkSpeed;
         else if (action == Action.Sprint) speed = SprintSpeed;
         else if (action == Action.Crounch) speed = CrounchSpeed;
-
-
-
-        Vector3 move = new Vector3(Input.GetAxis("Horizontal"),0,Input.GetAxis("Vertical"));
+        
+        
+        move = new Vector3(Input.GetAxis("Horizontal"),0,Input.GetAxis("Vertical"));
 
         //apply speed
         move *= speed;
@@ -97,6 +98,14 @@ public class Movement : MonoBehaviour
 
         cam.position = player.transform.position + Vector3.up * Height;
         cam.eulerAngles = new Vector3(direction.y, direction.x, 0);
+
+
+        //ûpdate aniamtion
+        if (grabpack != null)
+        {
+            grabpack.SetBool("walk" ,action == Action.Walk && move.magnitude > 0.1f);
+            grabpack.SetBool("sprint", action == Action.Sprint && move.magnitude > 0.1f);
+        }
     }
 
 

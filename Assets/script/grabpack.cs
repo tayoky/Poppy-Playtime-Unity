@@ -104,7 +104,7 @@ public class grabpack : MonoBehaviour
             Line();
 
             //gun point to the hand
-            gun.LookAt(line.GetPosition(line.positionCount - 2));
+            gun.LookAt(line.GetPosition(line.positionCount - 2),parent.transform.TransformDirection(Vector3.up));
         }
         public void FixedUpdateTick()
         {

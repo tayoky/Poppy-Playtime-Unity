@@ -9,12 +9,14 @@ public class Movement : MonoBehaviour
     public float WalkSpeed, SprintSpeed, CrounchSpeed;
     public float JumpForce;
     public float HeightMax, HeightMin,HeightSpeed;
+    public Transform swing;//for swing effect
+
     private float Height;
     private Rigidbody player;
     private Action action;
     private Vector2 direction;
     private float speed;
-    public Animator grabpack; //aniamtor for first person anim
+    private Animator grabpackP; //aniamtor for first person anim
     private Vector3 move;
 
     enum Action
@@ -27,6 +29,7 @@ public class Movement : MonoBehaviour
     private void Start()
     {
         player = GetComponent<Rigidbody>();
+        grabpackP = cam.GetComponent<Animator>();
         Height = HeightMax;
 
         //lock cursor
@@ -91,6 +94,7 @@ public class Movement : MonoBehaviour
         direction.y -= Input.GetAxis("Mouse Y");
 
 
+
         //bound up and down
         if (direction.y > 90) direction.y = 90;
         if (direction.y < -90) direction.y = -90;
@@ -101,11 +105,9 @@ public class Movement : MonoBehaviour
 
 
         //ûpdate aniamtion
-        if (grabpack != null)
-        {
-            grabpack.SetBool("walk" ,action == Action.Walk && move.magnitude > 0.1f);
-            grabpack.SetBool("sprint", action == Action.Sprint && move.magnitude > 0.1f);
-        }
+        grabpackP.SetBool("walk", action == Action.Walk && move.magnitude > 0.1f);
+        grabpackP.SetBool("sprint", action == Action.Sprint && move.magnitude > 0.1f);
+
     }
 
 

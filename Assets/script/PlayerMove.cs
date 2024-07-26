@@ -59,7 +59,6 @@ public class PlayerMove : MonoBehaviour
         //rotation
         player.transform.Rotate(Vector3.up * Input.GetAxis("Mouse X") * MouseSense.y);
 
-        grabpackP.Dec.y -= Input.GetAxis("Mouse X") * MouseSense.y;
 
         CamRot += Input.GetAxis("Mouse Y") * MouseSense.x;
 

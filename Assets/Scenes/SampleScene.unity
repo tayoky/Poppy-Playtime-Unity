@@ -456,7 +456,8 @@ MonoBehaviour:
   HandSpeed: 0.4
   LeftLine: {fileID: 725480146}
   RightLine: {fileID: 140822077}
-  Dec: {x: 0, y: 0}
+  swing: {fileID: 142698679}
+  SwingEffect: 0.8
 --- !u!120 &330585549
 LineRenderer:
   serializedVersion: 2
@@ -1255,6 +1256,7 @@ MonoBehaviour:
   HeightMax: 0.8
   HeightMin: 0.3
   HeightSpeed: 0.1
+  swing: {fileID: 0}
 --- !u!54 &995386183
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -93,7 +93,11 @@ public class Movement : MonoBehaviour
         direction.x += Input.GetAxis("Mouse X");
         direction.y -= Input.GetAxis("Mouse Y");
 
-
+        //swing
+        if(swing != null)
+        {
+            swing.localEulerAngles += new Vector3(Input.GetAxis("Mouse Y"), -Input.GetAxis("Mouse X"),0);
+        }
 
         //bound up and down
         if (direction.y > 90) direction.y = 90;

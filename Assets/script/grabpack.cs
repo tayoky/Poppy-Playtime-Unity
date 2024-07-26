@@ -13,13 +13,13 @@ public class grabpack : MonoBehaviour
     public Transform LeftLineStart, RightLineStart;
     public float MaxDis,HandSpeed;
     public LineRenderer LeftLine,RightLine;
-    public Vector2 Dec;
+    public Transform swing;
+    public float SwingEffect;
     private GrabGun left;
     private GrabGun right;
     // Start is called before the first frame update
     void Start()
     {
-        Dec = Vector2.zero;
 
         //ini left
         left = new GrabGun();
@@ -58,6 +58,10 @@ public class grabpack : MonoBehaviour
         //call the fixedtcik update
         left.FixedUpdateTick();
         right.FixedUpdateTick();
+
+        //recuce rotation for swing eeffect not working
+        //Debug.Log(swing.localEulerAngles);
+        //swing.localEulerAngles = new Vector3(swing.localEulerAngles.x - 180 * SwingEffect + 180, 0, 0);
     }
     
 

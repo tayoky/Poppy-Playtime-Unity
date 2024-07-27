@@ -72,15 +72,20 @@ public class Movement : MonoBehaviour
         player.velocity = new Vector3 (move.x,player.velocity.y,move.z);
 
 
-        //jump
-        if (Input.GetKeyDown(Jump))
-        {
+
             RaycastHit hit;
             Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, 10);
             float FloorDistance = hit.distance;
-            if(FloorDistance < 1.1f)
+        if (FloorDistance < 1.1f)
+        {
+            grabpackP.SetBool("jump", false);
+            //jump
+            if (Input.GetKeyDown(Jump))
             {
                 player.velocity = new Vector3(player.velocity.x, JumpForce, player.velocity.z);
+
+                //stat jump anim
+                grabpackP.SetBool("jump", true);
             }
         }
 

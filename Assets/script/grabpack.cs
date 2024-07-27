@@ -8,13 +8,21 @@ public class grabpack : MonoBehaviour
    
 
     public Transform OriginLeft,OriginRight;
-    public Transform LeftHand,RightHand;
+    public Transform LeftHand;
+    public Transform[] RightHands;
+    public GameObject[] RightHandsMesh;
+
+    public int[] UnlockedHand;
+
     public Transform LeftGun, RightGun;
     public Transform LeftLineStart, RightLineStart;
     public float MaxDis,HandSpeed;
     public LineRenderer LeftLine,RightLine;
     public Transform swing;
     public float SwingEffect;
+    public int selected_hand;
+    private int hand_to_switch;
+
     private GrabGun left;
     private GrabGun right;
     // Start is called before the first frame update
@@ -34,14 +42,15 @@ public class grabpack : MonoBehaviour
 
         //ini right
         right = new GrabGun();
-        right.hand_beavhiour = RightHand.GetComponent<Hand>();
+        right.hand_beavhiour = RightHands[UnlockedHand[selected_hand]].GetComponent<Hand>();
         right.origin = OriginRight;
-        right.hand = RightHand;
+        right.hand = RightHands[UnlockedHand[selected_hand]];
         right.gun = RightGun;
         right.line_start = RightLineStart;
         right.line = RightLine;
         right.button = 1;
         right.parent = this;
+        SetRightHandActive(selected_hand);
 
     }
 
@@ -53,6 +62,9 @@ public class grabpack : MonoBehaviour
         //call the tick update
         left.UpdateTick();
         right.UpdateTick();
+
+        //check for hand switching
+        
     }
 
     private void FixedUpdate()
@@ -64,6 +76,31 @@ public class grabpack : MonoBehaviour
         //recuce rotation for swing eeffect not working
         //Debug.Log(swing.localEulerAngles);
         //swing.localEulerAngles = new Vector3(swing.localEulerAngles.x - 180 * SwingEffect + 180, 0, 0);
+    }
+
+    public void SwitchHand()
+    {
+
+    }
+
+    public void SetRightHandActive(int index)
+    {
+        for (int i = 0; i < RightHandsMesh.Length; i++)
+        {
+            RightHandsMesh[i].SetActive(false);
+        }
+
+        for (int i =0; i < UnlockedHand.Length; i++)
+        {
+            RightHandsMesh[UnlockedHand[i]].SetActive(i == index);
+            RightHands[UnlockedHand[i]].parent = OriginRight;
+            if (i == index)
+            {
+                right.hand = RightHands[UnlockedHand[i]];
+                right.hand_beavhiour = RightHands[UnlockedHand[i]].GetComponent<Hand>();
+            }
+        }
+
     }
     
 

@@ -159,6 +159,7 @@ public class grabpack : MonoBehaviour
         public grabpack parent;
         public Hand hand_beavhiour;
         public bool stop_look = false;
+        public Transform grab_object;
 
         public void UpdateTick()
         {
@@ -175,14 +176,22 @@ public class grabpack : MonoBehaviour
                         RaycastHit hit;
                         if (Physics.Raycast(parent.transform.position, parent.transform.TransformDirection(Vector3.forward), out hit, parent.MaxDis))
                         {
-                            grab = true;
+                            
 
                             //set parent and find the point
                             point = hit.point;
                             norm = hit.normal;
-                            hand.parent = null;
+                            grab_object = hit.transform;
+                            
 
                         }
+                        else
+                        {
+                            point = parent.transform.position + parent.transform.TransformDirection(Vector3.forward) * parent.MaxDis;
+                            grab_object = null;
+                        }
+                        hand.parent = null;
+                        grab = true;
                     }
 
                 }
@@ -204,12 +213,18 @@ public class grabpack : MonoBehaviour
                 {
                     //snap the hand to the point
                     hand.position = point;
+
+                    //if object can't grab go back
+                    grab = hand_beavhiour.CanGrab && grab_object != null && (grab_object.GetComponent<Rigidbody>() != null || grab_object.GetComponent<Grabable>() != null);
+
                     //LeftHand.rotation = Quaternion.LookRotation(norm,Vector3.up);
                 }
                 else
                 {
                     //move the hand to the point
                     hand.position -= dif.normalized * parent.HandSpeed;
+
+                   
                 }
             }
             else

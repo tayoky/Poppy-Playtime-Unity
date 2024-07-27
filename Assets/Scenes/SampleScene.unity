@@ -455,7 +455,7 @@ MonoBehaviour:
   - {fileID: 8935654518832285481}
   - {fileID: 5400394034992172529}
   - {fileID: 4172901263554637003}
-  UnlockedHand: 00000000
+  UnlockedHand: 000000000100000002000000
   LeftGun: {fileID: 1300047601}
   RightGun: {fileID: 1803841264}
   LeftLineStart: {fileID: 5681158946271140073}
@@ -467,6 +467,7 @@ MonoBehaviour:
   swing: {fileID: 142698679}
   SwingEffect: 0.8
   selected_hand: 0
+  anim: {fileID: 1925680311}
 --- !u!120 &330585549
 LineRenderer:
   serializedVersion: 2
@@ -870,7 +871,6 @@ GameObject:
   m_Component:
   - component: {fileID: 785624495}
   - component: {fileID: 785624498}
-  - component: {fileID: 785624497}
   - component: {fileID: 785624496}
   m_Layer: 0
   m_Name: gun render
@@ -938,14 +938,6 @@ MonoBehaviour:
     mipBias: 0
     varianceClampScale: 0.9
     contrastAdaptiveSharpening: 0
---- !u!81 &785624497
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 785624494}
-  m_Enabled: 1
 --- !u!20 &785624498
 Camera:
   m_ObjectHideFlags: 0
@@ -1376,7 +1368,7 @@ GameObject:
   - component: {fileID: 995386183}
   - component: {fileID: 995386182}
   m_Layer: 0
-  m_Name: Capsule (1)
+  m_Name: player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1401,7 +1393,7 @@ MonoBehaviour:
   WalkSpeed: 5
   SprintSpeed: 8
   CrounchSpeed: 2
-  JumpForce: 10
+  JumpForce: 5
   HeightMax: 0.8
   HeightMin: 0.3
   HeightSpeed: 0.1
@@ -2026,6 +2018,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1925680310}
   - component: {fileID: 1925680311}
+  - component: {fileID: 1925680312}
   m_Layer: 0
   m_Name: FirstPerson
   m_TagString: Untagged
@@ -2072,6 +2065,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1925680312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1925680309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa81c5455f2478d4b9201389961cc4ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grabp: {fileID: 330585548}
 --- !u!1 &1935671383
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class grabpack : MonoBehaviour
@@ -25,9 +26,11 @@ public class grabpack : MonoBehaviour
 
     private GrabGun left;
     private GrabGun right;
+    public Animator anim;
     // Start is called before the first frame update
     void Start()
     {
+        hand_to_switch = -1;
 
         //ini left
         left = new GrabGun();
@@ -52,6 +55,7 @@ public class grabpack : MonoBehaviour
         right.parent = this;
         SetRightHandActive(selected_hand);
 
+
     }
 
 
@@ -64,7 +68,25 @@ public class grabpack : MonoBehaviour
         right.UpdateTick();
 
         //check for hand switching
-        
+        if(hand_to_switch == -1)
+        {
+            //mouse wheel
+            if (Input.GetAxisRaw("Mouse ScrollWheel") > 0) hand_to_switch = selected_hand + 1;
+            else if (Input.GetAxisRaw("Mouse ScrollWheel") < 0) hand_to_switch = selected_hand - 1;
+            else { 
+                for(int i=0; i < 9;i++) 
+                {
+                    if (Input.GetKeyDown((KeyCode)i + 49)) hand_to_switch = i;
+                }
+            }
+
+            if(hand_to_switch != -1) 
+            {
+                hand_to_switch =  ( hand_to_switch + UnlockedHand.Length)% UnlockedHand.Length;
+                //switch hand
+                anim.SetTrigger("switch");
+            }
+        }
     }
 
     private void FixedUpdate()
@@ -80,7 +102,12 @@ public class grabpack : MonoBehaviour
 
     public void SwitchHand()
     {
+        //set acivate hand
+        selected_hand = hand_to_switch;
+        SetRightHandActive(selected_hand);
 
+        //reset hand to swtich
+        hand_to_switch = -1;
     }
 
     public void SetRightHandActive(int index)

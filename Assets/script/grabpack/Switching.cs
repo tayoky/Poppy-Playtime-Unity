@@ -10,4 +10,9 @@ public class Switching : MonoBehaviour
         //not real just to call the grabpack
         grabp.SwitchHand();
     }
+
+    public void ResetLook()
+    {
+        grabp.ResetLook();
+    }
 }

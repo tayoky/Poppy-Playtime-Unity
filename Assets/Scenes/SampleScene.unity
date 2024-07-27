@@ -723,6 +723,7 @@ Transform:
   - {fileID: 4313686531548056007}
   - {fileID: 7326533951469534114}
   - {fileID: 3650074619073832738}
+  - {fileID: 1931872541}
   m_Father: {fileID: 543450653537533990}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &725480144
@@ -2078,6 +2079,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grabp: {fileID: 330585548}
+--- !u!1 &1931872540
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1931872541}
+  m_Layer: 0
+  m_Name: fake luanch
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1931872541
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1931872540}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.2589407, y: -0, z: -0, w: 0.96589327}
+  m_LocalPosition: {x: 0.13910007, y: -0.15591049, z: 0.16261292}
+  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 636218258}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1935671383
 GameObject:
   m_ObjectHideFlags: 0

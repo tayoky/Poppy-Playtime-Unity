@@ -72,7 +72,7 @@ public class grabpack : MonoBehaviour
         {
             //mouse wheel
             if (Input.GetAxisRaw("Mouse ScrollWheel") > 0) hand_to_switch = selected_hand + 1;
-            else if (Input.GetAxisRaw("Mouse ScrollWheel") < 0) hand_to_switch = selected_hand - 1;
+            else if (Input.GetAxisRaw("Mouse ScrollWheel") < 0) hand_to_switch = selected_hand - 1 + UnlockedHand.Length;
             else { 
                 for(int i=0; i < 9;i++) 
                 {
@@ -82,9 +82,17 @@ public class grabpack : MonoBehaviour
 
             if(hand_to_switch != -1) 
             {
-                hand_to_switch =  ( hand_to_switch + UnlockedHand.Length)% UnlockedHand.Length;
-                //switch hand
-                anim.SetTrigger("switch");
+                if (right.grab)
+                {
+                    right.grab = false;
+                }
+                else
+                {
+                    hand_to_switch = (hand_to_switch + UnlockedHand.Length) % UnlockedHand.Length;
+                    //switch hand
+                    anim.SetTrigger("switch");
+                    right.stop_look = true;
+                }
             }
         }
     }
@@ -108,6 +116,12 @@ public class grabpack : MonoBehaviour
 
         //reset hand to swtich
         hand_to_switch = -1;
+    }
+
+    public void ResetLook()
+    {
+        //rest the right.look
+        right.stop_look = false;
     }
 
     public void SetRightHandActive(int index)
@@ -144,6 +158,7 @@ public class grabpack : MonoBehaviour
         public LineRenderer line;
         public grabpack parent;
         public Hand hand_beavhiour;
+        public bool stop_look = false;
 
         public void UpdateTick()
         {
@@ -178,7 +193,7 @@ public class grabpack : MonoBehaviour
             Line();
 
             //gun point to the hand
-            gun.LookAt(line.GetPosition(line.positionCount - 2),parent.transform.TransformDirection(Vector3.up));
+            if(!stop_look) gun.LookAt(line.GetPosition(line.positionCount - 2),parent.transform.TransformDirection(Vector3.up));
         }
         public void FixedUpdateTick()
         {

@@ -160,6 +160,7 @@ public class grabpack : MonoBehaviour
         public Hand hand_beavhiour;
         public bool stop_look = false;
         public Transform grab_object;
+        public bool pull = false;
 
         public void UpdateTick()
         {
@@ -197,6 +198,7 @@ public class grabpack : MonoBehaviour
                 }
             }
 
+            if (Input.GetMouseButtonUp(button)) pull = false;
 
             //line
             Line();

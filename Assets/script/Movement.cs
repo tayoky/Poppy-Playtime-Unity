@@ -10,6 +10,7 @@ public class Movement : MonoBehaviour
     public float JumpForce;
     public float HeightMax, HeightMin,HeightSpeed;
     public Transform swing;//for swing effect
+    
 
     private float Height;
     private Rigidbody player;

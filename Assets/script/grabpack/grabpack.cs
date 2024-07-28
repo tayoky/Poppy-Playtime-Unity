@@ -168,6 +168,8 @@ public class grabpack : MonoBehaviour
         public Transform grab_object;
         public bool pull = false;
         private bool last_grab;
+        private int last_retract;
+        private int frame = 0;
 
         public void UpdateTick()
         {
@@ -190,6 +192,7 @@ public class grabpack : MonoBehaviour
                 }
                 else
                 {
+                    Send("OnFire");
                     if (hand_beavhiour.CanFire)
                     {
                         //check the hand is at the launcher
@@ -284,6 +287,8 @@ public class grabpack : MonoBehaviour
                     //pull object
                     hand.parent = grab_object;
 
+                    Send("Pull");
+
                     grab_object.GetComponent<Rigidbody>();
 
                     if (line.positionCount < 3)
@@ -329,6 +334,9 @@ public class grabpack : MonoBehaviour
                             grab_object = null;
                             //reset vertex
                             line.positionCount = 2;
+
+                            if (last_retract != frame - 1) Send("OnRetract");
+                            last_retract = frame;
                         }
                         else
                         {
@@ -363,6 +371,8 @@ public class grabpack : MonoBehaviour
 
             //update last
             last_grab = grab;
+
+            frame++;
         }
 
         void Line()
@@ -438,6 +448,14 @@ public class grabpack : MonoBehaviour
         void AddGrabObjectForce(Vector3 dir)
         {
             grab_object.GetComponent<Rigidbody>().AddForce(dir, ForceMode.Impulse);
+        }
+
+        void Send(string func)
+        {
+            if(hand_beavhiour.Script != null)
+            {
+                hand_beavhiour.Script.BroadcastMessage(func);
+            }
         }
     }
 

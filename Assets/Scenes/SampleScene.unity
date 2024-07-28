@@ -7267,6 +7267,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3687400074185305477}
   - component: {fileID: 6920350832425860699}
+  - component: {fileID: 6920350832425860700}
   m_Layer: 0
   m_Name: Hand_Green
   m_TagString: Untagged
@@ -7290,7 +7291,19 @@ MonoBehaviour:
   CanGrab: 1
   CanPull: 1
   SpecialGrab: []
-  Script: {fileID: 0}
+  Script: {fileID: 6920350832425860700}
+--- !u!114 &6920350832425860700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6920350832425860698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ba53193d508c3e4383ce697457065a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &6960329700405740224
 Transform:
   m_ObjectHideFlags: 0

@@ -10,7 +10,10 @@ public class Movement : MonoBehaviour
     public float JumpForce;
     public float HeightMax, HeightMin,HeightSpeed;
     public Transform swing;//for swing effect
-    
+
+    public AudioClip[] SoundJump;
+    public AudioClip[] SoundWalk;
+    public AudioClip[] SoundSprint;
 
     private float Height;
     private Rigidbody player;
@@ -19,6 +22,8 @@ public class Movement : MonoBehaviour
     private float speed;
     private Animator grabpackP; //aniamtor for first person anim
     private Vector3 move;
+    private AudioSource audio_player;
+    private bool grounded;
 
     enum Action
     {
@@ -29,9 +34,13 @@ public class Movement : MonoBehaviour
 
     private void Start()
     {
+        grounded = false;
         player = GetComponent<Rigidbody>();
         grabpackP = cam.GetComponent<Animator>();
         Height = HeightMax;
+
+        //get audioplayer
+        audio_player = GetComponent<AudioSource>();
 
         //lock cursor
         Cursor.lockState = CursorLockMode.Locked;
@@ -73,12 +82,14 @@ public class Movement : MonoBehaviour
         player.velocity = new Vector3 (move.x,player.velocity.y,move.z);
 
 
-
-            RaycastHit hit;
-            Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, 10);
-            float FloorDistance = hit.distance;
+        grounded = false;
+        RaycastHit hit;
+        Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, 10);
+        float FloorDistance = hit.distance;
+        
         if (FloorDistance < 1.1f)
         {
+            grounded = true;
             grabpackP.SetBool("jump", false);
             //jump
             if (Input.GetKeyDown(Jump))
@@ -87,6 +98,9 @@ public class Movement : MonoBehaviour
 
                 //stat jump anim
                 grabpackP.SetBool("jump", true);
+
+                //play jump sound
+                PLayRandomClip(SoundJump);
             }
         }
 
@@ -118,7 +132,27 @@ public class Movement : MonoBehaviour
         grabpackP.SetBool("walk", action == Action.Walk && move.magnitude > 0.1f);
         grabpackP.SetBool("sprint", action == Action.Sprint && move.magnitude > 0.1f);
 
+        //update sound
+        if (grounded && move.magnitude > 0.1f && !audio_player.isPlaying)
+        {
+            if (action == Action.Walk) PLayRandomClip(SoundWalk);
+            else if (action == Action.Sprint) PLayRandomClip(SoundSprint);
+        }
+
     }
 
+
+    public void PLayRandomClip(AudioClip[] clips)
+    {
+        int index = Random.Range(0, clips.Length);
+        PLayAudio(clips[index]);
+    }
+
+    public void PLayAudio(AudioClip clip)
+    {
+        //simple function to play any clip
+        audio_player.clip = clip;
+        audio_player.Play();
+    }
 
 }

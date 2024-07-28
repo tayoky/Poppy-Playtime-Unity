@@ -13,6 +13,7 @@ public class Switching : MonoBehaviour
 
     public void ResetLook()
     {
+        Debug.Log("call end switch");
         grabp.ResetLook();
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using Unity.VisualScripting;
 using UnityEngine;
+using static grabpack;
 
 public class grabpack : MonoBehaviour
 {
@@ -22,6 +23,8 @@ public class grabpack : MonoBehaviour
     public Transform swing;
     public float SwingEffect;
     public int selected_hand;
+
+    public AudioClip SoundFire,SoundRetract,SoundPull;
     private int hand_to_switch;
 
     private GrabGun left;
@@ -114,14 +117,17 @@ public class grabpack : MonoBehaviour
         selected_hand = hand_to_switch;
         SetRightHandActive(selected_hand);
 
-        //reset hand to swtich
-        hand_to_switch = -1;
+        
     }
 
     public void ResetLook()
     {
         //rest the right.look
         right.stop_look = false;
+
+        //reset hand to swtich
+        hand_to_switch = -1;
+        Debug.Log("switching end");
     }
 
     public void SetRightHandActive(int index)
@@ -161,6 +167,7 @@ public class grabpack : MonoBehaviour
         public bool stop_look = false;
         public Transform grab_object;
         public bool pull = false;
+        private bool last_grab;
 
         public void UpdateTick()
         {
@@ -168,43 +175,75 @@ public class grabpack : MonoBehaviour
             {
                 if (grab)
                 {
+                    
                     grab = false;
+                    if (grab_object.GetComponent<Rigidbody>())
+                    {
+                        pull = true;
+                    }
+                    else
+                    {
+
+                        //play the rectract sound
+                        PLayAudio(parent.SoundRetract);
+                    }
                 }
                 else
                 {
                     if (hand_beavhiour.CanFire)
                     {
-                        RaycastHit hit;
-                        if (Physics.Raycast(parent.transform.position, parent.transform.TransformDirection(Vector3.forward), out hit, parent.MaxDis))
+                        //check the hand is at the launcher
+                        Vector3 dif = hand.position - origin.position;
+                        if (dif.magnitude < parent.HandSpeed)
                         {
-                            
+                            RaycastHit hit;
+                            if (Physics.Raycast(parent.transform.position, parent.transform.TransformDirection(Vector3.forward), out hit, parent.MaxDis))
+                            {
 
-                            //set parent and find the point
-                            point = hit.point;
-                            norm = hit.normal;
-                            grab_object = hit.transform;
-                            
 
+                                //set parent and find the point
+                                point = hit.point;
+                                norm = hit.normal;
+                                grab_object = hit.transform;
+
+
+                            }
+                            else
+                            {
+                                //set point in direction of the camera
+                                point = parent.transform.position + parent.transform.TransformDirection(Vector3.forward) * parent.MaxDis;
+                                grab_object = null;
+                            }
+                            hand.parent = null;
+                            grab = true;
+
+                            //play the sound 
+                            PLayAudio(parent.SoundFire);
                         }
-                        else
-                        {
-                            point = parent.transform.position + parent.transform.TransformDirection(Vector3.forward) * parent.MaxDis;
-                            grab_object = null;
-                        }
-                        hand.parent = null;
-                        grab = true;
                     }
 
                 }
             }
 
-            if (Input.GetMouseButtonUp(button)) pull = false;
+            if (Input.GetMouseButtonUp(button) && pull) 
+            { 
+                pull = false;
+                PLayAudio(parent.SoundRetract);
+            }
+
+            //update puul sound
+            if(pull && !origin.GetComponent<AudioSource>().isPlaying)
+            {
+                PLayAudio(parent.SoundPull);
+            }
 
             //line
             Line();
 
             //gun point to the hand
             if(!stop_look) gun.LookAt(line.GetPosition(line.positionCount - 2),parent.transform.TransformDirection(Vector3.up));
+
+           
         }
         public void FixedUpdateTick()
         {
@@ -216,8 +255,17 @@ public class grabpack : MonoBehaviour
                     //snap the hand to the point
                     hand.position = point;
 
+                    //make hand child if rigidboddy
+                    //if (grab_object GetComponent<Rigidbody>()) hand.parent = grab_object; 
+
                     //if object can't grab go back
-                    grab = hand_beavhiour.CanGrab && grab_object != null && (grab_object.GetComponent<Rigidbody>() != null || grab_object.GetComponent<Grabable>() != null);
+                    if (! (hand_beavhiour.CanGrab && grab_object != null && (grab_object.GetComponent<Rigidbody>() != null || grab_object.GetComponent<Grabable>() != null)) )
+                    {
+                        grab = false;
+
+                        //play audio
+                        PLayAudio(parent.SoundRetract);
+                    }
 
                     //LeftHand.rotation = Quaternion.LookRotation(norm,Vector3.up);
                 }
@@ -231,48 +279,90 @@ public class grabpack : MonoBehaviour
             }
             else
             {
-                if (line.positionCount < 3)
+                if (pull)
                 {
-                    Vector3 dif = hand.position - origin.position;
-                    if (dif.magnitude < parent.HandSpeed)
+                    //pull object
+                    hand.parent = grab_object;
+
+                    grab_object.GetComponent<Rigidbody>();
+
+                    if (line.positionCount < 3)
                     {
-                        //snap the hand to the launcher
-                        hand.parent = origin;
-                        hand.position = origin.position;
-                        //reset vertex
-                        line.positionCount = 2;
+                        Vector3 dif = hand.position - origin.position;
+                        if (dif.magnitude < parent.HandSpeed)
+                        {
+
+                        }
+                        else
+                        {
+                            //move theobj to the launcher
+                            AddGrabObjectForce( -dif.normalized * parent.HandSpeed);
+                        }
+
                     }
                     else
                     {
-                        //move the hand to the launcher
-                        hand.position -= dif.normalized * parent.HandSpeed;
+                        Vector3 dif = hand.position - line.GetPosition(1);
+                        if (dif.magnitude < parent.HandSpeed)
+                        {
 
-
+                            ShiftLeftLine();
+                        }
+                        else
+                        {
+                            //move the obj to the point
+                            AddGrabObjectForce( - dif.normalized * parent.HandSpeed);
+                        }
                     }
-
-                    hand.eulerAngles = origin.eulerAngles;
                 }
                 else
                 {
-                    Vector3 dif = hand.position - line.GetPosition(1);
-                    if (dif.magnitude < parent.HandSpeed)
+                    hand.parent = null;
+                    if (line.positionCount < 3)
                     {
-                        //snap
-                        hand.position = line.GetPosition(1);
+                        Vector3 dif = hand.position - origin.position;
+                        if (dif.magnitude < parent.HandSpeed)
+                        {
+                            //snap the hand to the launcher
+                            hand.parent = origin;
+                            hand.position = origin.position;
+                            grab_object = null;
+                            //reset vertex
+                            line.positionCount = 2;
+                        }
+                        else
+                        {
+                            //move the hand to the launcher
+                            hand.position -= dif.normalized * parent.HandSpeed;
 
-                        ShiftLeftLine();
+
+                        }
+
+                        hand.eulerAngles = origin.eulerAngles;
                     }
                     else
                     {
-                        //move the hand to the point
-                        hand.position -= dif.normalized * parent.HandSpeed;
+                        Vector3 dif = hand.position - line.GetPosition(1);
+                        if (dif.magnitude < parent.HandSpeed)
+                        {
+                            //snap
+                            hand.position = line.GetPosition(1);
+
+                            ShiftLeftLine();
+                        }
+                        else
+                        {
+                            //move the hand to the point
+                            hand.position -= dif.normalized * parent.HandSpeed;
 
 
+                        }
                     }
                 }
             }
 
-
+            //update last
+            last_grab = grab;
         }
 
         void Line()
@@ -301,6 +391,8 @@ public class grabpack : MonoBehaviour
 
             if (Physics.Raycast(line_start.position, dif, out hit, dif.magnitude - 0.005f))
             {
+                if(hit.transform != grab_object)
+                { 
                 Debug.Log("new vertex create because of object : " + hit.transform.gameObject.ToString() + " at : " + hit.point.ToString());
                 //increase the number of vertex
                 line.positionCount++;
@@ -308,6 +400,7 @@ public class grabpack : MonoBehaviour
                 //update pos
                 line.SetPosition(line.positionCount - 2, hit.point);
                 line.SetPosition(line.positionCount - 1, line_start.position);
+                }
             }
         }
         void LineSimplify()
@@ -335,6 +428,18 @@ public class grabpack : MonoBehaviour
             }
             line.positionCount--;
         }
+
+        void PLayAudio(AudioClip clip)
+        {
+            origin.GetComponent<AudioSource>().clip = clip;
+            origin.GetComponent<AudioSource>().Play();
+        }
+
+        void AddGrabObjectForce(Vector3 dir)
+        {
+            grab_object.GetComponent<Rigidbody>().AddForce(dir, ForceMode.Impulse);
+        }
     }
 
+    
 }

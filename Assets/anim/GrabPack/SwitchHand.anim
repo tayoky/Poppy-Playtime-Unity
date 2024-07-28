@@ -1290,7 +1290,7 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 2
+  - time: 1.9833333
     functionName: ResetLook
     data: 
     objectReferenceParameter: {fileID: 0}

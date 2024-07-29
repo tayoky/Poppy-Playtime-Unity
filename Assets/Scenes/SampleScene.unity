@@ -409,6 +409,37 @@ Transform:
   - {fileID: 543450653537533990}
   m_Father: {fileID: 1925680310}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &238164514
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 238164515}
+  m_Layer: 0
+  m_Name: RightModel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &238164515
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 238164514}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.70698315, y: -0, z: -0, w: 0.7072304}
+  m_LocalPosition: {x: 0.000047607347, y: -0.00011406973, z: 0.0008085442}
+  m_LocalScale: {x: 0.099999994, y: 0.10000002, z: 0.10000002}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3048738597687609390}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -582,6 +613,8 @@ MonoBehaviour:
   HandSpeed: 0.4
   LeftLine: {fileID: 725480146}
   RightLine: {fileID: 140822077}
+  NewLocationLeft: {fileID: 0}
+  NewLocationRight: {fileID: 238164515}
   swing: {fileID: 142698679}
   SwingEffect: 0.8
   selected_hand: 0
@@ -589,6 +622,8 @@ MonoBehaviour:
   SoundRetract: {fileID: 8300000, guid: 035b6a1cdcd976a42866ba82b6f158da, type: 3}
   SoundPull: {fileID: 8300000, guid: 9b144842862435e41b1db826fc6525db, type: 3}
   anim: {fileID: 1925680311}
+  RightAnimator: {fileID: 1803841265}
+  LeftAnimator: {fileID: 1803841265}
 --- !u!120 &330585549
 LineRenderer:
   serializedVersion: 2
@@ -2467,6 +2502,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1803841264}
+  - component: {fileID: 1803841265}
+  - component: {fileID: 1803841266}
   m_Layer: 3
   m_Name: rightgun
   m_TagString: Untagged
@@ -2490,6 +2527,40 @@ Transform:
   - {fileID: 3048738597687609390}
   m_Father: {fileID: 4590920474864682679}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &1803841265
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1803841263}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 4a96953160d8b0b499d6ae1fa65434c3, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1803841266
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1803841263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa81c5455f2478d4b9201389961cc4ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grabp: {fileID: 330585548}
 --- !u!1 &1925680309
 GameObject:
   m_ObjectHideFlags: 0
@@ -4958,6 +5029,7 @@ Transform:
   - {fileID: 223345165814986915}
   - {fileID: 8167126768790150389}
   - {fileID: 8493167375113414560}
+  - {fileID: 238164515}
   m_Father: {fileID: 1803841264}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3061067991612773076
@@ -5334,14 +5406,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8223396355626845386}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.11151222, z: -0, w: 0.993763}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.00032303124, y: 0, z: 7.2527136e-12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4503133505714070232}
   m_Father: {fileID: 6695359997399238648}
-  m_LocalEulerAnglesHint: {x: 0, y: -12.805, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &3869916409603047327
 Transform:
   m_ObjectHideFlags: 0

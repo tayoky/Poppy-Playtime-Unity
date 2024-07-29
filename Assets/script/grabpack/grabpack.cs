@@ -20,6 +20,9 @@ public class grabpack : MonoBehaviour
     public Transform LeftLineStart, RightLineStart;
     public float MaxDis,HandSpeed;
     public LineRenderer LeftLine,RightLine;
+    public Transform NewLocationLeft,NewLocationRight;
+
+    
     public Transform swing;
     public float SwingEffect;
     public int selected_hand;
@@ -30,6 +33,9 @@ public class grabpack : MonoBehaviour
     private GrabGun left;
     private GrabGun right;
     public Animator anim;
+    //animator for grabgun
+    public Animator RightAnimator;
+    public Animator LeftAnimator;
     // Start is called before the first frame update
     void Start()
     {
@@ -93,11 +99,15 @@ public class grabpack : MonoBehaviour
                 {
                     hand_to_switch = (hand_to_switch + UnlockedHand.Length) % UnlockedHand.Length;
                     //switch hand
-                    anim.SetTrigger("switch");
+                    RightAnimator.SetTrigger("switch");
                     right.stop_look = true;
                 }
             }
         }
+
+        //make the launcher right position
+        OriginRight.position = NewLocationRight.position;
+        OriginRight.rotation = NewLocationRight.rotation;
     }
 
     private void FixedUpdate()

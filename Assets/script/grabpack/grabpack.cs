@@ -106,8 +106,11 @@ public class grabpack : MonoBehaviour
         }
 
         //make the launcher right position
-        OriginRight.position = NewLocationRight.position;
-        OriginRight.rotation = NewLocationRight.rotation;
+        if (right.stop_look)
+        {
+            OriginRight.position = NewLocationRight.position;
+            OriginRight.rotation = NewLocationRight.rotation;
+        }
     }
 
     private void FixedUpdate()

@@ -4,9 +4,16 @@ using UnityEngine;
 
 public class Green : MonoBehaviour
 {
-    public void OnGrab()
+    public float power = 0.0f;
+    public void OnGrab(Transform obj)
     {
-        Debug.Log("grab");
+        if(obj.GetComponent<GreenPower>()) power = obj.GetComponent<GreenPower>().PowerTime;
+        if (obj.GetComponent<GreenRecevier>())
+        {
+            float trans = obj.GetComponent<GreenRecevier>().power ;
+            obj.GetComponent<GreenRecevier>().power = power;
+            power =trans;
+        }
     }
 
     public void Pull()
@@ -17,5 +24,11 @@ public class Green : MonoBehaviour
     public void OnRetract()
     {
         Debug.Log("retract");
+    }
+
+    private void Update()
+    {
+        power -= Time.deltaTime;
+        if(power < 0.0f) power = 0.0f;
     }
 }

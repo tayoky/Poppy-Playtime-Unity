@@ -1,6 +1,6 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using Unity.VisualScripting;
 using UnityEngine;
 using static grabpack;
@@ -140,7 +140,6 @@ public class grabpack : MonoBehaviour
 
         //reset hand to swtich
         hand_to_switch = -1;
-        Debug.Log("switching end");
     }
 
     public void SetRightHandActive(int index)
@@ -180,9 +179,9 @@ public class grabpack : MonoBehaviour
         public bool stop_look = false;
         public Transform grab_object;
         public bool pull = false;
-        private bool last_grab;
         private int last_retract;
         private int frame = 0;
+        private int last_grab = 0;
 
         public void UpdateTick()
         {
@@ -275,7 +274,7 @@ public class grabpack : MonoBehaviour
                     //if (grab_object GetComponent<Rigidbody>()) hand.parent = grab_object; 
 
                     //if object can't grab go back
-                    if (! (hand_beavhiour.CanGrab && grab_object != null && (grab_object.GetComponent<Rigidbody>() != null || grab_object.GetComponent<Grabable>() != null)) )
+                    if (! (hand_beavhiour.CanGrab && grab_object != null && (grab_object.GetComponent<Rigidbody>() != null || grab_object.GetComponent<Grabable>() != null || CheckSpecialGrab(grab_object))) )
                     {
                         grab = false;
 
@@ -284,6 +283,9 @@ public class grabpack : MonoBehaviour
                     }
 
                     //LeftHand.rotation = Quaternion.LookRotation(norm,Vector3.up);
+                    if (last_grab != frame - 1) hand_beavhiour.Script.BroadcastMessage("OnGrab",grab_object) ;
+
+                    last_grab = frame;
                 }
                 else
                 {
@@ -382,8 +384,7 @@ public class grabpack : MonoBehaviour
                 }
             }
 
-            //update last
-            last_grab = grab;
+
 
             frame++;
         }
@@ -469,6 +470,16 @@ public class grabpack : MonoBehaviour
             {
                 hand_beavhiour.Script.BroadcastMessage(func);
             }
+        }
+
+        bool CheckSpecialGrab(Transform obj)
+        {
+            for(int i=0; i< hand_beavhiour.SpecialGrab.Length; i++)
+            {
+                string comp = hand_beavhiour.SpecialGrab[i];
+                if (obj.gameObject.tag == comp) return true; 
+            }
+            return false;
         }
     }
 

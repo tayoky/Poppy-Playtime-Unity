@@ -34,9 +34,14 @@ public class grabpack : MonoBehaviour
     private GrabGun left;
     private GrabGun right;
     public Animator anim;
+
+
     //animator for grabgun
     public Animator RightAnimator;
     public Animator LeftAnimator;
+
+    //lenght of the cable
+    public float cable_lenght { get { return right.cable_lenght + left.cable_lenght; } }
     private Vector3 ORpos;
     private quaternion ORrot;
     // Start is called before the first frame update
@@ -173,6 +178,12 @@ public class grabpack : MonoBehaviour
 
     }
     
+    //function to recalulate cable
+    public void CaclulateLines()
+    {
+        right.Line();
+        left.Line();
+    }
 
     //grabgun class important thigs is here
     public class GrabGun : MonoBehaviour
@@ -193,6 +204,19 @@ public class grabpack : MonoBehaviour
         private int last_retract;
         private int frame = 0;
         private int last_grab = 0;
+        public float cable_lenght { get
+            {
+                //code for one side cbale lenght
+                float lenght = 0.0f;
+                for(int i =0; i < line.positionCount - 1; i++)
+                {
+                    Vector3 pointA = line.GetPosition(i);
+                    Vector3 pointB = line.GetPosition(i + 1);
+
+                    lenght += (pointB - pointA).magnitude;
+                }
+                return lenght;
+            } }
 
         public void UpdateTick()
         {
@@ -400,7 +424,7 @@ public class grabpack : MonoBehaviour
             frame++;
         }
 
-        void Line()
+        public void Line()
         {
             //set extremites position
             line.SetPosition(0, hand.position);

@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 8524743521921192334}
   - component: {fileID: 4844795014412295500}
   - component: {fileID: 773558486705077024}
+  - component: {fileID: 589408895131050922}
   - component: {fileID: 9173292477305711871}
   - component: {fileID: 80057700901766518}
-  - component: {fileID: 589408895131050922}
   - component: {fileID: 1090871733294008808}
   m_Layer: 0
   m_Name: GreenPower
@@ -88,6 +88,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &589408895131050922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5068412809191047788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59c8c3e977f60bb4685351fbcf5d30e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PowerTime: 10
 --- !u!108 &9173292477305711871
 Light:
   m_ObjectHideFlags: 0
@@ -173,19 +186,6 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
---- !u!114 &589408895131050922
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5068412809191047788}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59c8c3e977f60bb4685351fbcf5d30e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PowerTime: 15
 --- !u!64 &1090871733294008808
 MeshCollider:
   m_ObjectHideFlags: 0

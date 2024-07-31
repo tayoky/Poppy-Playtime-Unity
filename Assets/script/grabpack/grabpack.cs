@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 using static grabpack;
@@ -36,6 +37,8 @@ public class grabpack : MonoBehaviour
     //animator for grabgun
     public Animator RightAnimator;
     public Animator LeftAnimator;
+    private Vector3 ORpos;
+    private quaternion ORrot;
     // Start is called before the first frame update
     void Start()
     {
@@ -64,7 +67,9 @@ public class grabpack : MonoBehaviour
         right.parent = this;
         SetRightHandActive(selected_hand);
 
-
+        //get position of origin
+        ORpos = OriginRight.localPosition;
+        ORrot = OriginRight.localRotation;
     }
 
 
@@ -91,9 +96,10 @@ public class grabpack : MonoBehaviour
 
             if(hand_to_switch != -1) 
             {
-                if (right.grab)
+                if (right.grab || right.hand.position != OriginRight.position)
                 {
                     right.grab = false;
+                    hand_to_switch = -1;
                 }
                 else
                 {
@@ -110,6 +116,11 @@ public class grabpack : MonoBehaviour
         {
             OriginRight.position = NewLocationRight.position;
             OriginRight.rotation = NewLocationRight.rotation;
+        }
+        else
+        {
+            OriginRight.localPosition = ORpos;
+            OriginRight.localRotation = ORrot;
         }
     }
 

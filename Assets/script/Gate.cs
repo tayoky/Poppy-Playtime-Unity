@@ -29,4 +29,14 @@ public class Gate : MonoBehaviour
         if(transform.localPosition.z > OpenY) transform.localPosition = new Vector3(X, Z, OpenY);
     }
 
+    public void Activate()
+    {
+        open = true;
+    }
+
+    public void Desactivate()
+    {
+        open = false;
+    }
+
 }
